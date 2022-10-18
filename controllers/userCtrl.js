@@ -17,7 +17,12 @@ const userCtrl = {
         password: passwordHash
       });
       await newUser.save();
-      res.json({ msg: 'Sign up Success' });
+
+      // if register success create token
+      const payload = { id: newUser._id, name: newUser.username };
+      const token = jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '7d' });
+
+      res.json({ token });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
@@ -46,6 +51,8 @@ const userCtrl = {
       if (!token) return res.send(false);
 
       jwt.verify(token, process.env.TOKEN_SECRET, async (err, verified) => {
+        console.log(token);
+        console.log(err);
         if (err) return res.send(false);
 
         const user = await User.findById(verified.id);
