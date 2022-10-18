@@ -1,12 +1,27 @@
 import * as dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Connect to MongoDB
+const URI = process.env.MONGODB_URL;
+mongoose.connect(
+  URI,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  },
+  (err) => {
+    if (err) throw err;
+    console.log('Connected to MongoDB');
+  }
+);
 
 // Listen Server
 const PORT = process.env.PORT || 5000;
