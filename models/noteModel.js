@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 
 const noteSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true
-    },
     content: {
       type: String,
       required: true
@@ -20,4 +16,4 @@ const noteSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model('Notes', noteSchema);
+export default mongoose.model('Note', noteSchema);
