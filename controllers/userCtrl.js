@@ -22,7 +22,7 @@ const userCtrl = {
       const payload = { id: newUser._id, name: newUser.username };
       const token = jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '7d' });
 
-      res.json({ token });
+      res.json({ token, username: newUser.username });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
@@ -40,7 +40,7 @@ const userCtrl = {
       const payload = { id: user._id, name: user.username };
       const token = jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '7d' });
 
-      res.json({ token });
+      res.json({ token, username: user.username });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
@@ -56,9 +56,13 @@ const userCtrl = {
         if (err) return res.send(false);
 
         const user = await User.findById(verified.id);
+
         if (!user) return res.send(false);
 
-        return res.send(true);
+        return res.send({
+          status: true,
+          username: user.username
+        });
       });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
