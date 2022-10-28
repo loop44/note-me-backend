@@ -5,7 +5,11 @@ import noteCtrl from '../controllers/noteCtrl.js';
 
 const router = express.Router();
 
-router.route('/').get(auth, noteCtrl.getNotes).post(auth, noteCtrl.createNote);
+router
+  .route('/')
+  .get(auth, noteCtrl.getNotes)
+  .post(auth, noteCtrl.createNote)
+  .put(auth, noteCtrl.updateIndexes);
 
 router.route('/:id').put(auth, noteCtrl.updateNote).delete(auth, noteCtrl.deleteNote);
 

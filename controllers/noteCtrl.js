@@ -11,11 +11,15 @@ const noteCtrl = {
   },
   createNote: async (req, res) => {
     try {
-      const { content } = req.body;
+      const { id, content, index, date } = req.body;
       const newNote = new Note({
+        id,
         content,
+        index,
+        date,
         user_id: req.user.id
       });
+      console.log(newNote);
       await newNote.save();
       res.json({ msg: 'Created a Note' });
     } catch (err) {
@@ -24,7 +28,8 @@ const noteCtrl = {
   },
   deleteNote: async (req, res) => {
     try {
-      await Note.findByIdAndDelete(req.params.id);
+      console.log(req.params.id);
+      await Note.findOneAndDelete({ id: req.params.id });
       res.json({ msg: 'Deleted a Note' });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -34,12 +39,32 @@ const noteCtrl = {
     try {
       const { content } = req.body;
       await Note.findOneAndUpdate(
-        { _id: req.params.id },
+        { id: req.params.id },
         {
           content
         }
       );
       res.json({ msg: 'Updated a Note' });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+  updateIndexes: async (req, res) => {
+    try {
+      const { indexes } = req.body;
+      console.log(indexes);
+      indexes.forEach(async (id, index) => {
+        await Note.findOneAndUpdate(
+          { id },
+          {
+            index
+          }
+        );
+      });
+
+      // const notes = await Note.find({ user_id: req.user.id });
+      // console.log(notes);
+      res.json({ msg: 'Updated Indexes' });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
