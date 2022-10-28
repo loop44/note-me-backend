@@ -11,12 +11,13 @@ const noteCtrl = {
   },
   createNote: async (req, res) => {
     try {
-      const { id, content, index, date } = req.body;
+      const { id, content, index, date, color } = req.body;
       const newNote = new Note({
         id,
         content,
         index,
         date,
+        color,
         user_id: req.user.id
       });
       console.log(newNote);
